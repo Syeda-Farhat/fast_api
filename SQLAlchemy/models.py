@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, Integer, Column, String
 from sqlalchemy.orm import declarative_base
 
-
 # db_url = "sqlite:///path/to/mydatabase.db"
 db_url = r"sqlite:///C:/Program Files/sqlite/practice_db/mydatabase.db"
 
@@ -19,6 +18,8 @@ class User(Base):
 
 
 Base.metadata.create_all(engine)
+
+
 
 
 
