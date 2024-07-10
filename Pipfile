@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 sqlalchemy = "*"
 psycopg2 = "*"
+pydantic = {extras = ["all"], version = "*"}
 
 [dev-packages]
 
