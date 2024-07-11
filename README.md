@@ -1,1 +1,3 @@
-# fast_api
+# FastAPI 
+
+This repo is for learning purpose. 
