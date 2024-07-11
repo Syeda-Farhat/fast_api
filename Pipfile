@@ -7,6 +7,7 @@ name = "pypi"
 sqlalchemy = "*"
 psycopg2 = "*"
 pydantic = {extras = ["all"], version = "*"}
+fastapi = {extras = ["all"], version = "*"}
 
 [dev-packages]
 
