@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-SQLALCHEMY_DATABASE_URL = "postgressql://postgres:admin@localhost:5432/fastapi"
+SQLALCHEMY_DATABASE_URL = "postgressql://postgres:admin@localhost/fastapi"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
@@ -14,3 +14,11 @@ Base = declarative_base()
 # the above code can be use for other project just need to 
 # fix the db_url for that project. 
 
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
