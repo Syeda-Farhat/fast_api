@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from .import models
+from .import models, schemas 
 from .database import engine, get_db
 from sqlalchemy.orm import Session
 # import time
@@ -18,11 +18,11 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-class Post(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-    rating: Optional[int] = None
+# class Post(BaseModel):
+#     title: str
+#     content: str
+#     published: bool = True
+#     rating: Optional[int] = None
 
 # below is the db connection and use the while because if the db connection is getting
 # failed because of internet issue or any other such tech prob then it keep connecting
@@ -66,7 +66,7 @@ def get_post():
 
 # insertion 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(post: Post):
+def create_post(post: schemas.Post):
     cursor.execute(
     """INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)""",
     (post.title, post.content, post.published),)
@@ -83,4 +83,4 @@ def get_post(id: int):
     """INSERT * FROM posts WHERE id = %s""", (str(id),))
     test_post = cursor.fetchone()
     return {"data": test_post}
-    
+
