@@ -66,7 +66,7 @@ def get_post():
 
 # insertion 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(post: schemas.Post):
+def create_post(post: schemas.PostCreate):
     cursor.execute(
     """INSERT INTO posts (title, content, published) VALUES (%s, %s, %s)""",
     (post.title, post.content, post.published),)
@@ -74,7 +74,6 @@ def create_post(post: schemas.Post):
     new_post = cursor.fetchone()
     conn.commit() # whenever insert any data conn.commit is must 
     return {"data": new_post}
-
 
 # retriving 
 @app.get("/posts/{id}")
