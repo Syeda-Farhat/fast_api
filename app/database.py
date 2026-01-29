@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-
+# postgressql://<username>:<password>@<ip-address/hostname>/<databasename>
 SQLALCHEMY_DATABASE_URL = "postgressql://postgres:admin@localhost/fastapi"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -16,9 +16,9 @@ Base = declarative_base()
 
 
 # Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()   # always close the db connection after use

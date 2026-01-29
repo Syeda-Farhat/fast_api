@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Annotated, List
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from .import models, schemas 
-from .database import engine, get_db
+from .database import engine, get_db, SessionLocal
 from sqlalchemy.orm import Session
 # import time
 
@@ -14,9 +14,47 @@ from sqlalchemy.orm import Session
 # without the column names, therefore import realdictcursor display the column
 # name as well, and it is pasing as a parameter in db conn below
 
-models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
+models.Base.metadata.create_all(bind=engine)
+
+class ChoiceBase(BaseModel):
+    choice_text: str
+    question_id: int
+
+class QuestionBase(BaseModel):
+    question_text: str
+    choices: List[ChoiceBase] = []
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+db_dependency = Annotated[Session, Depends(get_db)]
+
+@app.post("/questions/")
+async def create_question(
+    question: QuestionBase,
+    db: db_dependency,
+):
+    db_question = models.Questions(question_text=question.question_text)
+    db.add(db_question)
+    db.commit()
+    db.refresh(db_question)
+
+    for choice in question.choices:
+        db_choice = models.Choices(
+            choice_text=choice.choice_text, question_id=db_question.id
+        )
+        db.add(db_choice)
+
+    db.commit() # all changes are saved to the db
+    return {"message": "Question and choices created successfully"}
 
 # class Post(BaseModel):
 #     title: str
